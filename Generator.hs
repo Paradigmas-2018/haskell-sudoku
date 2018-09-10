@@ -1,4 +1,4 @@
-#!/usr/bin/env runhaskell
+module Generator where
 
 import Data.Array
 import Data.List
@@ -18,17 +18,7 @@ puzzleBoard :: Board
 puzzleBoard = array ((0, 0), (8, 8)) $ puzzleAssocs zeroPuzzle
 
 zeroPuzzle :: [[Mark]]
-zeroPuzzle = [[0, 0, 0,  0, 0, 0,  0, 0, 0],
-                 [0, 0, 0,  0, 0, 0,  0, 0, 0],
-                 [0, 0, 0,  0, 0, 0,  0, 0, 0],
-
-                 [0, 0, 0,  0, 0, 0,  0, 0, 0],
-                 [0, 0, 0,  0, 0, 0,  0, 0, 0],
-                 [0, 0, 0,  0, 0, 0,  0, 0, 0],
-
-                 [0, 0, 0,  0, 0, 0,  0, 0, 0],
-                 [0, 0, 0,  0, 0, 0,  0, 0, 0],
-                 [0, 0, 0,  0, 0, 0,  0, 0, 0]]
+zeroPuzzle = replicate 9 $ replicate 9 0
 
 -- Retorna todas as soluções
 solutions :: Board -> [Board]

@@ -2,6 +2,7 @@ module Sudoku where
 
 import Grid (grid)
 import Cell (solveCell)
+import Generator
 
 solveSudoku :: [Int]
 solveSudoku = solve grid 0
@@ -35,3 +36,4 @@ prettyPrint = do
                   line (x:xs) str n = line xs (str ++ " " ++ (show x)) (n + 1)
 
                   verticalLine = replicate 25 '-'                  
+
