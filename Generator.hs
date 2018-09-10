@@ -5,12 +5,8 @@ import Data.List
 import System.Random.Shuffle
 import System.Random
 
-main = do
-    let solution = solve puzzleBoard
-    printBoard solution
-
 -- As marcas no tabuleiro são representadas por Ints no intervalo 0..9, onde 0 representa "vazio".
-tipo Mark = Int
+type Mark = Int
 
 -- Cada quadrado é representado por um par (linha, coluna)
 type Location = (Int, Int)
@@ -19,10 +15,10 @@ type Location = (Int, Int)
 type Board = Array Location Mark
 
 puzzleBoard :: Board
-puzzleBoard = array ((0, 0), (8, 8)) $ puzzleAssocs examplePuzzle
+puzzleBoard = array ((0, 0), (8, 8)) $ puzzleAssocs zeroPuzzle
 
-examplePuzzle :: [[Mark]]
-examplePuzzle = [[0, 0, 0,  0, 0, 0,  0, 0, 0],
+zeroPuzzle :: [[Mark]]
+zeroPuzzle = [[0, 0, 0,  0, 0, 0,  0, 0, 0],
                  [0, 0, 0,  0, 0, 0,  0, 0, 0],
                  [0, 0, 0,  0, 0, 0,  0, 0, 0],
 
@@ -34,18 +30,13 @@ examplePuzzle = [[0, 0, 0,  0, 0, 0,  0, 0, 0],
                  [0, 0, 0,  0, 0, 0,  0, 0, 0],
                  [0, 0, 0,  0, 0, 0,  0, 0, 0]]
 
-
--- Retorna a primeira solução ou nenhuma, caso não exista
-solve :: Board -> Maybe Board
-solve = headOrNothing . solutions
-
 -- Retorna todas as soluções
 solutions :: Board -> [Board]
 solutions b = solutions' (emptyLocations b) b
   where
-    - Dada a lista de locais vazios em uma placa, escolha um local vazio,
-    - determine quais marcas podem ser colocadas nesse local e, em seguida,
-    - recursivamente encontrar todas as soluções para esse conjunto de marcas.
+    -- Dada a lista de locais vazios em uma placa, escolha um local vazio,
+    -- determine quais marcas podem ser colocadas nesse local e, em seguida,
+    -- recursivamente encontrar todas as soluções para esse conjunto de marcas.
     solutions' :: [Location] -> Board -> [Board]
     solutions' []     b = [b]
     solutions' (x:xs) b = concatMap (solutions' xs) candidateBoards
@@ -95,16 +86,6 @@ puzzleAssocs = concatMap rowAssocs . zip [0..8]
     colAssocs :: Int -> [(Int, Mark)] -> [((Int, Int), Mark)]
     colAssocs row cols = map (\(col, m) -> ((row, col), m)) cols
 
--- Retorna a cabeça da lista de Board
-headOrNothing :: [a] -> Maybe a
-headOrNothing []     = Nothing
-headOrNothing (x:xs) = Just x
-
--- Formata a saída do Board
-printBoard :: Maybe Board -> IO ()
-printBoard Nothing  = putStrLn "No solution"
-printBoard (Just b) = mapM_ putStrLn [show $ b `marksInRow` row | row <- [0..8]]
-
 -- Gera uma lista embaralhada de números de 1 a 9
 generateRandomMarks :: Int -> [Mark]
 generateRandomMarks n = shuffle' [1..9] 9 (mkStdGen n)
@@ -128,4 +109,3 @@ generateRandomLocations n = shuffle' [0..8] 9 (mkStdGen n)
 -- Gera um Board para ser resolvido
 generate :: Board
 generate = removeMarks $ head $ solutions $ generateBoxes puzzleBoard
-
